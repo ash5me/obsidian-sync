@@ -31,7 +31,7 @@ Copy `client_secret.json` into the project folder, next to `main.zig`. The tool 
 From the folder that contains `main.zig`:
 
 ```powershell
-zig build-exe main.zig -O ReleaseSafe -femit-bin=obsidian-sync.exe
+zig build-exe main.zig -O ReleaseSafe
 ```
 
 ## Usage
