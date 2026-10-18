@@ -7,7 +7,7 @@ This is a personal project. It runs only on your computer and talks directly to 
 ## Requirements
 
 - Windows 10 or 11
-- Zig 0.14.x
+- Zig 0.16.0
 - A Google account
 - A Google Cloud project with the Google Drive API enabled and an OAuth client
 
@@ -18,20 +18,13 @@ This is a personal project. It runs only on your computer and talks directly to 
 1. Go to [console.cloud.google.com](https://console.cloud.google.com) and create a project.
 2. Open **APIs & Services → Library**, search for **Google Drive API**, and enable it.
 3. Open **OAuth consent screen** (Google may now call this **Google Auth Platform → Audience**). Choose **External**, enter an app name and your email address, and under **Test users** add your own Gmail address. You don't need to publish the app.
-4. Open **Credentials → Create credentials → OAuth client ID**. Choose **TVs and Limited Input devices** as the application type, then copy the Client ID and Client secret.
+4. Open **Credentials → Create credentials → OAuth client ID**. Choose **TVs and Limited Input devices** as the application type, then download the JSON file and save it as `client_secret.json` in the project folder.
 
 Apps in Testing mode need you to sign in again about every 7 days. The tool detects this and shows a new sign-in code, so nothing breaks.
 
-### 2. Save the credentials
+### 2. Place the credentials file
 
-In PowerShell:
-
-```powershell
-setx GDRIVE_CLIENT_ID "your-id.apps.googleusercontent.com"
-setx GDRIVE_CLIENT_SECRET "your-secret"
-```
-
-Close and reopen PowerShell afterward so the variables load.
+Copy `client_secret.json` into the project folder, next to `main.zig`. The tool reads it at startup, so the secret never appears in the source code. Keep this file out of any shared folder or Git repository. If you use Git, add `client_secret.json` to `.gitignore`.
 
 ### 3. Build
 
@@ -82,7 +75,7 @@ The tool keeps two files on your computer:
 
 | Message | What to do |
 |---|---|
-| `Missing GDRIVE_CLIENT_ID` | Close and reopen PowerShell after running `setx`. |
+| `client_secret.json not found` | Put the file in the project folder, next to `obsidian-sync.exe`, or run the tool from that folder. |
 | `Saved sign-in has expired` | Normal in Testing mode. Follow the new sign-in code. |
 | `access_denied` | Your Google account isn't in the Test users list. Add it and try again. |
 | `HTTP 403` mentioning `accessNotConfigured` | The Google Drive API isn't enabled for your project. |
@@ -92,12 +85,7 @@ The tool keeps two files on your computer:
 
 1. Go to [myaccount.google.com/permissions](https://myaccount.google.com/permissions), find the app, and remove its access.
 2. Delete the `%APPDATA%\obsidian-drive-sync` folder.
-3. Remove the saved credentials:
-
-```powershell
-reg delete "HKCU\Environment" /v GDRIVE_CLIENT_ID /f
-reg delete "HKCU\Environment" /v GDRIVE_CLIENT_SECRET /f
-```
+3. Delete `client_secret.json` from the project folder, and from any backups or synced copies of that folder.
 
 ## Privacy
 
